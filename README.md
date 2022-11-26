@@ -1,0 +1,2 @@
+# AuditHelper
+Automate tedious comparisons
