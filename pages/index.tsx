@@ -9,8 +9,6 @@ export default function Home() {
   const [accountingAnalysis, setAccountingAnalysis] = useState<AccountingData | null>(null);
   const [bankAnalysis, setBankAnalysis] = useState<AccountingData | null>(null);
 
-  console.table(accountingAnalysis?.verificationsRows);
-
   const moreToUpload = accountingAnalysis == null || bankAnalysis == null;
   return (
     <>

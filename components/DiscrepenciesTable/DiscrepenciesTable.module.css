@@ -1,39 +1,92 @@
 .incorrectTableRow {
-    background-color: #3f2e2e;
+    background-color: #521515;
 
 }
 
-.correctTableRow {
-    background-color: #374937;
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
-.table {
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 440px;
+}
+
+
+.tableContainer {
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 440px;
+    border-radius: 1em;
+    border: 1px solid #ffffff;
+    padding: 1em;
+}
+
+.styledTable {
     border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.table td,
-.table th {
-    border: 1px solid black;
-    padding: 5px;
+.styledTable thead tr {
+    text-align: left;
+    border-spacing: 0;
+    border-bottom: 1px solid #dddddd;
 }
 
-.table th {
-    background-color: #4caf50;
-    color: white;
+.styledTable th,
+.styledTable td {
+    padding: 12px 15px;
 }
 
-.table tr:nth-child(even) {
-    background-color: #f2f2f2;
+.styledTable tbody tr {
+    border-bottom: 1px solid rgba(136, 138, 148, 0.25);
 }
 
-.table tr:hover {
-    background-color: #ddd;
+.toggleButton {
+    background-color: black;
+    padding: 0.5rem;
+    text-align: left;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    max-width: 300px;
 }
 
-.table tr:nth-child(odd) {
-    background-color: #fff;
+.toggleButton:hover,
+.toggleButton:active {
+    color: #0070f3;
+    border-color: #0070f3;
 }
 
-.table tr:hover {
-    background-color: #ddd;
+.styledTable tr:first-child td:first-child {
+    border-top-left-radius: 10px;
 }
+
+.styledTable tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+
+.styledTable tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.styledTable tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+

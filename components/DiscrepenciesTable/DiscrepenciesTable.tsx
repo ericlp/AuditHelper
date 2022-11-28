@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { inspect } from 'util';
-
 import {
   AccountingData,
   calculatedDiscrepencies,
+  findCommonDates,
   getValuesFromMerge,
   happendBefore,
   MergedRowsByEquality,
-  VerificationRow,
 } from '../../utils/AccountDataTypes';
 
 import styles from './DiscrepenciesTable.module.css';
@@ -17,6 +15,48 @@ interface DiscrepenciesTableProps {
   bank: AccountingData;
   acc: AccountingData;
 }
+
+export const DiscrepenciesTable: React.FC<DiscrepenciesTableProps> = ({ bank, acc }) => {
+  const { correctRows, incorrectAccRows, incorrectBankRows } = calculatedDiscrepencies(bank, acc);
+  const incorrectRows = [...incorrectAccRows, ...incorrectBankRows];
+
+  const { start, end } = findCommonDates(bank, acc);
+
+  const allRows = organizeRowsForTable(correctRows, incorrectRows);
+  const allIncorrectRows = organizeRowsForTable([], incorrectRows);
+  const [showAll, setShowAll] = React.useState(true);
+
+  const rowsToDisplay = showAll ? allRows : allIncorrectRows;
+
+  const toggleShowAllButton = (
+    <button className={styles.toggleButton} onClick={() => setShowAll(prev => !prev)}>
+      {showAll ? 'Hide correct rows' : 'Show correct rows'}
+    </button>
+  );
+
+  return (
+    <div className={styles.column}>
+      <div className={styles.row}>
+        <h1>Discrepencies</h1>
+        {toggleShowAllButton}
+      </div>
+      <p> {`Showing ${rowsToDisplay.length} event/s between ${start.toLocaleDateString('sv')} and ${end.toLocaleDateString('sv')}`} </p>
+      <div className={styles.tableContainer}>
+        <table className={styles.styledTable}>
+          <thead>
+            <tr>
+              <th>Ver Nr</th>
+              <th>Date</th>
+              <th>Bank</th>
+              <th>Account</th>
+            </tr>
+          </thead>
+          <tbody>{rowsToDisplay}</tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 interface TableRowProps {
   merge: MergedRowsByEquality;
@@ -29,7 +69,7 @@ const IncorrectTableRow: React.FC<TableRowProps> = props => {
 };
 
 const CorrectTableRow: React.FC<TableRowProps> = props => {
-  return <TableRow className={styles.correctTableRow} {...props} />;
+  return <TableRow className={''} {...props} />;
 };
 
 const TableRow: React.FC<CustomTableRowProps> = ({ merge, className }) => {
@@ -81,29 +121,4 @@ const organizeRowsForTable = (correct: MergedRowsByEquality[], incorrect: Merged
   }
 
   return rows;
-};
-
-export const DiscrepenciesTable: React.FC<DiscrepenciesTableProps> = ({ bank, acc }) => {
-  const { correctRows, incorrectAccRows, incorrectBankRows } = calculatedDiscrepencies(bank, acc);
-
-  console.log('incorrectAccRows', incorrectAccRows);
-  console.log('incorrectBankRows', incorrectBankRows);
-  const rows = organizeRowsForTable(correctRows, [...incorrectAccRows, ...incorrectBankRows]);
-
-  return (
-    <>
-      <h1>Discrepencies</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Ver Nr</th>
-            <th>Date</th>
-            <th>Bank</th>
-            <th>Account</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    </>
-  );
 };
