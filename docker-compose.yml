@@ -1,0 +1,13 @@
+version: "3"
+services:
+  frontend:
+    image: audit-helper
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG_MODE=true
