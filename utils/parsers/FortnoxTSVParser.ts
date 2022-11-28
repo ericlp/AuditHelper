@@ -1,5 +1,5 @@
-import { AccountingData, AccountingDataCtor, VerificationRow } from './AccountAnalysisTypes';
-import { toDate } from './toDate';
+import { AccountingData, AccountingDataCtor, VerificationRow } from '../AccountDataTypes';
+import { toDate } from '../toDate';
 
 // Example output from Fortnox
 `Report   
@@ -41,7 +41,7 @@ export const parseFortnox = (input: string): AccountingData | null => {
   const incomingSaldo = parseFloat(incomingSaldoRow[incomingSaldoRow.length - 1]);
 
   // Find the end of the table
-  const withoutHeader = lines.slice(startTableIndex + 5);
+  const withoutHeader = lines.slice(startTableIndex + 4);
   const endTableIndex = withoutHeader.findIndex(line => line.startsWith('-'));
   if (endTableIndex === -1) return null;
 
@@ -53,16 +53,20 @@ export const parseFortnox = (input: string): AccountingData | null => {
   return AccountingDataCtor(incomingSaldo, verificationsRows);
 };
 
-const rmSpaceInStr = (str: string) => str.replace(/\s/g, '');
+const preFloatParseFormat = (str: string) => str.replace(/\s/g, '').replace(',', '.');
 
-const parseFortnoxRow = (row: string[], id: number): VerificationRow => {
-  const [_Konto, Vernr, _Ks, Datum, Text, _Transaktionsinfo, _, Debet, Kredit, _Saldo] = row;
-  const debet = parseFloat(rmSpaceInStr(Debet));
+const parseFortnoxRow = (row: string[], id: number) => {
+  if (row.length < 10) {
+    console.error('Row has wrong number of columns', row);
+    throw new Error(`Row ${id} has ${row.length} columns, expected 10`);
+  }
+  const [_Konto, Vernr, _Ks, _, Datum, Text, _Transaktionsinfo, Debet, Kredit, _Saldo] = row;
+  const debet = parseFloat(preFloatParseFormat(Debet));
   return {
     id,
-    verNr: parseInt(Vernr.split(' ')[1]),
+    verNr: Vernr,
     date: toDate(Datum),
     text: Text,
-    value: isNaN(debet) ? -parseFloat(rmSpaceInStr(Kredit)) : debet,
+    value: isNaN(debet) ? -parseFloat(preFloatParseFormat(Kredit)) : debet,
   };
 };

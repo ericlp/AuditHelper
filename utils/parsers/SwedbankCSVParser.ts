@@ -1,5 +1,5 @@
-import { AccountingData, AccountingDataCtor, VerificationRow } from './AccountAnalysisTypes';
-import { toDate } from './toDate';
+import { AccountingData, AccountingDataCtor, VerificationRow } from '../AccountDataTypes';
+import { toDate } from '../toDate';
 
 // Exmaple of output from Swedbank
 `* Transaktionsrapport Period 2022-07-01 – 2022-11-26 Skapad 2022-11-26 19:19 CET\t\t\t\t\t\t\t\t\t\t\t
@@ -27,6 +27,7 @@ export const parseSwedbank = (input: string): AccountingData | null => {
 
   // Read incoming saldo from total of first row
   const incomingSaldo = parseFloat(rows[0][1]);
+  if (isNaN(incomingSaldo)) return null;
 
   const verificationsRows = rows.map((row, i) => parseSwedbankRow(row, i));
 
@@ -34,11 +35,20 @@ export const parseSwedbank = (input: string): AccountingData | null => {
 };
 
 const parseSwedbankRow = (row: string[], id: number): VerificationRow => {
-  const [_Radnr, _Clnr, _Kontonr, _Produkt, _Valuta, Bokfdag, _Transdag, _Valutadag, Referens, _Text, Belopp, _Saldo] = row;
+  if (row.length < 12) {
+    console.error('Row has wrong number of columns', row);
+    throw new Error(`Row ${id} has ${row.length} columns, expected at least 12`);
+  }
+  const [_Radnr, _Clnr, _Kontonr, _Produkt, _Valuta, Bokfdag, _Transdag, _Valutadag] = row.slice(0, 8);
+
+  // The message may have commas in it, so we have to join them up again
+  const [_Saldo, Belopp, _Text, ...restRest] = row.slice(8, row.length).reverse();
+  const Meddelande = restRest.reverse().join(',');
+
   return {
     id,
     date: toDate(Bokfdag),
-    text: Referens,
+    text: Meddelande,
     value: parseFloat(Belopp),
   };
 };

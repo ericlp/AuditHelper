@@ -1,0 +1,39 @@
+.incorrectTableRow {
+    background-color: #3f2e2e;
+
+}
+
+.correctTableRow {
+    background-color: #374937;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table td,
+.table th {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.table th {
+    background-color: #4caf50;
+    color: white;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tr:hover {
+    background-color: #ddd;
+}
+
+.table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.table tr:hover {
+    background-color: #ddd;
+}

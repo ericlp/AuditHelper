@@ -1,4 +1,4 @@
 export const toDate = (dateStr: string) => {
-  const [day, month, year] = dateStr.split('-');
-  return new Date(+year, +month - 1, +day);
+  const [year, month, day] = dateStr.split('-').map(a => +a);
+  return new Date(year, month - 1, day);
 };

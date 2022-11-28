@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from 'react';
 
 import styles from '../../styles/Home.module.css';
-import { AccountingData } from '../../utils/AccountAnalysisTypes';
-import { parseFortnox } from '../../utils/FortnoxParser';
-import { parseSwedbank } from '../../utils/SwedbankCSVParser';
+import { AccountingData } from '../../utils/AccountDataTypes';
+import { parseFortnox } from '../../utils/parsers/FortnoxTSVParser';
+import { parseSwedbank } from '../../utils/parsers/SwedbankCSVParser';
 import { pushToast } from '../Snackbar/Snackbar';
 
 function fileToAccountAnalysis(
