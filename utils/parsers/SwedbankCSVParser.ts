@@ -44,7 +44,6 @@ const parseSwedbankRow = (row: string[], id: number): VerificationRow => {
   // The message may have commas in it, so we have to join them up again
   const [_Saldo, Belopp, _Text, ...restRest] = row.slice(8, row.length).reverse();
   const Meddelande = restRest.reverse().join(',');
-
   return {
     id,
     date: toDate(Bokfdag),

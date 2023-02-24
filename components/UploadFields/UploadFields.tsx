@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 
-import styles from '../../styles/Home.module.css';
+import styles from '../../styles/globals.module.css';
 import { AccountingData } from '../../utils/AccountDataTypes';
 import { parseFortnox } from '../../utils/parsers/FortnoxTSVParser';
 import { parseSwedbank } from '../../utils/parsers/SwedbankCSVParser';
@@ -34,23 +34,20 @@ interface UploadFilesProps {
 }
 
 export const UploadFiles: React.FC<UploadFilesProps> = ({ accountingAnalysis, setAccountingAnalysis, bankAnalysis, setBankAnalysis }) => (
-  <>
-    <h1 className={styles.title}>Welcome to AuditHelper</h1>
-    <div className={styles.grid}>
-      <UploadField
-        complete={bankAnalysis != null}
-        onChange={e => fileToAccountAnalysis(parseSwedbank, e.target.files?.item(0) ?? null, setBankAnalysis)}
-        name="bank"
-        text="Upload bank file"
-      />
-      <UploadField
-        complete={accountingAnalysis != null}
-        onChange={e => fileToAccountAnalysis(parseFortnox, e.target.files?.item(0) ?? null, setAccountingAnalysis)}
-        name="accounting"
-        text="Upload accounting file"
-      />
-    </div>
-  </>
+  <div className={styles.grid}>
+    <UploadField
+      complete={bankAnalysis != null}
+      onChange={e => fileToAccountAnalysis(parseSwedbank, e.target.files?.item(0) ?? null, setBankAnalysis)}
+      name="bank"
+      text="Transaktionlista (CSV)"
+    />
+    <UploadField
+      complete={accountingAnalysis != null}
+      onChange={e => fileToAccountAnalysis(parseFortnox, e.target.files?.item(0) ?? null, setAccountingAnalysis)}
+      name="accounting"
+      text="Kontoanalys (txt)"
+    />
+  </div>
 );
 
 interface UploadFieldProps {

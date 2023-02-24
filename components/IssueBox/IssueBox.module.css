@@ -1,0 +1,36 @@
+
+.issueBox {
+    border-radius: 1em;
+    border: 1px solid #00419a;
+    margin: 1rem 0;
+    padding: 1rem 2rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.issueBox:hover {
+    border-color: #0070f3;
+}
+
+.issueBoxHeader {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.issueBoxTitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.issueBoxIcon {
+    font-size: 1.5rem;
+    height: 2rem;
+    width: 2rem;
+}
+
+.issueBoxContent {
+    margin-top: 1rem;
+}

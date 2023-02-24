@@ -3,38 +3,29 @@
 
 }
 
-
-.column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-}
-
-.row {
+.titleRow {
     display: flex;
     flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
-    width: 440px;
+    width: 600px;
 }
 
-
 .tableContainer {
-
-
+    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    width: 440px;
+    width: 600px;
     border-radius: 1em;
     border: 1px solid #ffffff;
     padding: 1em;
 }
 
 .styledTable {
+    width: 100%;
     border-collapse: collapse;
     font-size: 0.9em;
     font-family: sans-serif;

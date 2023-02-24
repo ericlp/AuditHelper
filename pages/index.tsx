@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
 
-import { FixedTopLeftButton } from '../components/ClearDataButton/ClearDataButton';
+import Link from 'next/link';
+
 import { UploadFiles } from '../components/UploadFields/UploadFields';
-import { Validate } from '../components/Validate';
-import { AccountingData } from '../utils/AccountDataTypes';
+import gStyles from '../styles/globals.module.css';
+import { useAccountingData } from '../utils/AccountingDataContext';
+
+import styles from './index.module.css';
 
 export default function Home() {
-  const [accountingAnalysis, setAccountingAnalysis] = useState<AccountingData | null>(null);
-  const [bankAnalysis, setBankAnalysis] = useState<AccountingData | null>(null);
+  const { accountAnalysis, bankAnalysis, setAccountAnalysis, setBankAnalysis } = useAccountingData();
 
-  const moreToUpload = accountingAnalysis == null || bankAnalysis == null;
+  const moreToUpload = accountAnalysis == null || bankAnalysis == null;
   return (
     <>
-      {moreToUpload && (
-        <UploadFiles
-          accountingAnalysis={accountingAnalysis}
-          bankAnalysis={bankAnalysis}
-          setAccountingAnalysis={setAccountingAnalysis}
-          setBankAnalysis={setBankAnalysis}
-        />
-      )}
+      <UploadFiles
+        accountingAnalysis={accountAnalysis}
+        bankAnalysis={bankAnalysis}
+        setAccountingAnalysis={setAccountAnalysis}
+        setBankAnalysis={setBankAnalysis}
+      />
+
       {!moreToUpload && (
-        <>
-          <FixedTopLeftButton
-            onClick={() => {
-              setAccountingAnalysis(null);
-              setBankAnalysis(null);
-            }}
-          />
-          <Validate bankAnalysis={bankAnalysis} accountAnalysis={accountingAnalysis} />
-        </>
+        <div className={styles.centerItemContainer}>
+          <Link href={'/analysis'}>
+            <button className={`${gStyles.card}`}>
+              <span>Analysera rapporter</span>
+            </button>
+          </Link>
+        </div>
       )}
     </>
   );
