@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { VerificationRow } from '../../utils/AccountDataTypes';
+import { VerificationRow } from '../../utils/types/AccountDataTypes';
 
 import styles from './Tables.module.css';
 

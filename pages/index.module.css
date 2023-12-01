@@ -6,3 +6,36 @@
     height: 100%;
 }
 
+.flexColumnCenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexRowCenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.removeButton {
+    background-color: #ff0000;
+    width: 1rem;
+    height: 1rem;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 0;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.uploadedFile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}

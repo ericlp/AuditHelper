@@ -1,5 +1,5 @@
-import { AccountingData, AccountingDataCtor, VerificationRow } from '../AccountDataTypes';
 import { toDate } from '../toDate';
+import { VerificationRow } from '../types/VerificationRow';
 
 // Exmaple of output from Swedbank
 `* Transaktionsrapport Period 2022-07-01 – 2022-11-26 Skapad 2022-11-26 19:19 CET\t\t\t\t\t\t\t\t\t\t\t
@@ -20,18 +20,12 @@ Radnr\tClnr\tKontonr\tProdukt\tValuta\tBokfdag\tTransdag\tValutadag\tReferens\tT
 20\t81059\t9843435208\tFöretagskonto\tSEK\t2022-11-14\t2022-11-14\t2022-11-14\tA102\tÖverföring via internet\t-150\t218252.2
 21\t81059\t9843435208\tFöretagskonto\tSEK\t2022-11-14\t2022-11-14\t2022-11-14\tA122\tÖverföring via internet\t-327.8\t218402.2`;
 
-export const parseSwedbank = (input: string): AccountingData | null => {
+export const parseSwedbank = (input: string): VerificationRow[] | null => {
   // split and remove last empty line
   const lines = input.split('\n').filter(line => line.length > 0);
   const rows = lines.slice(2).map(line => line.split(','));
 
-  // Read incoming saldo from total of first row
-  const incomingSaldo = parseFloat(rows[0][1]);
-  if (isNaN(incomingSaldo)) return null;
-
-  const verificationsRows = rows.map((row, i) => parseSwedbankRow(row, i));
-
-  return AccountingDataCtor(incomingSaldo, verificationsRows);
+  return rows.map((row, i) => parseSwedbankRow(row, i));
 };
 
 const parseSwedbankRow = (row: string[], id: number): VerificationRow => {

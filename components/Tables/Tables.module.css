@@ -1,6 +1,9 @@
 .incorrectTableRow {
     background-color: #521515;
+}
 
+.combinedTableRow {
+    background-color: #6b5d16;
 }
 
 .titleRow {
@@ -40,7 +43,7 @@
 
 .styledTable th,
 .styledTable td {
-    padding: 12px 15px;
+    padding: 8px 10px;
 }
 
 .styledTable tbody tr {

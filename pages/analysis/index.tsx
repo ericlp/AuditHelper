@@ -1,40 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { IssueBox } from '../../components/IssueBox/IssueBox';
-import { Numbers } from '../../components/Numbers/Numbers';
-import { BankTable } from '../../components/Tables/BankTable';
-import { VerificationRowTable } from '../../components/Tables/VerificationRowTable';
-import { AccountingDataWithinInterval, findCommonDates } from '../../utils/AccountDataTypes';
-import { useAccountingData } from '../../utils/AccountingDataContext';
+import { ComparisonTable } from '../../components/Tables/ComparisonTable';
+import { useBank } from '../../utils/contexts/BankContext';
+import { AccountingDataWithinInterval, findCommonDates, findDifferences } from '../../utils/types/AccountDataTypes';
+
+import styles from './index.module.css';
 
 export const ValidateBankAgainstAccounting: React.FC = () => {
-  const { bankAnalysis, accountAnalysis } = useAccountingData();
+  const { bankRows, accountRows } = useBank();
   const router = useRouter();
 
   useEffect(() => {
-    if (!bankAnalysis || !accountAnalysis) {
+    if (!bankRows || !accountRows) {
       router.push('/');
     }
-  }, [bankAnalysis, accountAnalysis, router]);
+  }, [bankRows, accountRows, router]);
 
-  if (!bankAnalysis || !accountAnalysis) {
+  const rows = useMemo(() => findDifferences(bankRows, accountRows), [bankRows, accountRows]);
+
+  if (!bankRows || !accountRows) {
     return <></>;
   }
 
-  const { start, end } = findCommonDates(bankAnalysis, accountAnalysis);
+  const { start, end } = findCommonDates(bankRows, accountRows);
 
-  const rowsAfterLastDateInAccounting = AccountingDataWithinInterval(bankAnalysis, end, undefined);
+  const newBank = AccountingDataWithinInterval(bankRows, start, end);
+  const newAcc = AccountingDataWithinInterval(accountRows, start, end);
+
+  const diffIncoming = newBank.incomingSaldo - newAcc.incomingSaldo;
+  const diffOutgoing = newBank.outgoingSaldo - newAcc.outgoingSaldo;
+  const diffTotal = diffIncoming - diffOutgoing;
 
   return (
     <>
-      <IssueBox Issue={<Numbers bank={bankAnalysis} acc={accountAnalysis} />} Title={'Siffror'} />
-      <IssueBox Issue={<BankTable bank={bankAnalysis} acc={accountAnalysis} />} Title={'Bank vs Kontoanalys'} />
-      <IssueBox
-        Issue={<VerificationRowTable rows={rowsAfterLastDateInAccounting.verificationsRows} />}
-        Title={'Händelser efter sista bokförda'}
-      />
+      <div className={styles.flexColumnCenter}>
+        <p> Skillander: Bank - Kontoanalys </p>
+        <p> {`Inkommande: ${diffIncoming.toFixed(2).toLocaleString()}`} </p>
+        <p> {`Omslutning: ${diffTotal.toFixed(2).toLocaleString()}`} </p>
+        <p> {`Utgående: ${diffOutgoing.toFixed(2).toLocaleString()}`} </p>
+      </div>
+      <ComparisonTable rows={rows} />
     </>
   );
 };
